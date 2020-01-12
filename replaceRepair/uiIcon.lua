@@ -12,7 +12,6 @@ local iconWater = sdlext.surface(path .."scripts/replaceRepair/img/water.png")
 local iconAcid = sdlext.surface(path .."scripts/replaceRepair/img/acid.png")
 local iconLava = sdlext.surface(path .."scripts/replaceRepair/img/lava.png")
 
-local color_mask_50 = sdl.rgba(0, 0, 0, 50)
 local color_mask_140 = sdl.rgba(0, 0, 0, 140)
 local cull_R_letter = sdl.rect(18, 65, 14, 15)
 

@@ -25,7 +25,7 @@
 	clip(Ui, self, screen, drawRect, clipRects)
 ]]
 
--- remove pixels 'cullRect' from rect 'r'
+-- remove pixels 'cullRect' from rect 'drawRect'
 -- and return a table of rects
 -- not intersecting each other or the cullRect.
 local function splitRect(drawRect, cullRect)
