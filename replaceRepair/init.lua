@@ -7,9 +7,10 @@ local selected = require(path .."replaceRepair/lib/selected")
 local highlighted = require(path .."replaceRepair/lib/highlighted")
 local uiIcon = require(path .."replaceRepair/uiIcon")
 local compatibility = require(path .."replaceRepair/compatibility")
+local menu = require(path .."replaceRepair/lib/menu")
 
 local this = {
-	version = "2.1.2",
+	version = "2.2.0",
 }
 
 lmn_replaceRepair = lmn_replaceRepair or {}
@@ -57,6 +58,7 @@ end
 function this:load()
 	selected:load()
 	highlighted:load()
+	menu:load()
 end
 
 return this
