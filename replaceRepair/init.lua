@@ -10,7 +10,7 @@ local compatibility = require(path .."replaceRepair/compatibility")
 local menu = require(path .."replaceRepair/lib/menu")
 
 local this = {
-	version = "2.2.0",
+	version = "2.2.1",
 }
 
 lmn_replaceRepair = lmn_replaceRepair or {}
