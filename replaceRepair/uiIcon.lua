@@ -43,7 +43,7 @@ function this.createui()
 		
 		-- children are added in reverse order
 		-- because the last added are drawn first.
-		-- draw order: root, main, mask, mask_inactive, overlay, mask_menu
+		-- draw order: root, main, mask_inactive, mask_overlay, overlay, mask_menu
 		
 		-- root - container element.
 		local root = Ui()
@@ -54,7 +54,7 @@ function this.createui()
 		local mask_menu = UiCover()
 			:addTo(root)
 		
-		-- overlay when pawn is in water/smoke
+		-- overlay icon when pawn is in water/smoke
 		local overlay = Ui()
 			:width(1):height(1)
 			:decorate({ DecoSurface() })
