@@ -192,4 +192,23 @@ function this.clear(id, field)
 	end
 end
 
+local vanillaGetText = GetText
+function GetText(id, ...)
+	local result = vanillaGetText(id, ...)
+	
+	if id:match("^Skill_Repair") then
+		local repair = lmn_replaceRepair.GetCurrentSkill()
+		
+		if type(repair) == 'table' then
+			if id:match("Name$") then
+				result = _G[repair.Weapon]:GetName()
+			elseif id:match("Description$") then
+				result = _G[repair.Weapon]:GetDescription()
+			end
+		end
+	end
+	
+	return result
+end
+
 return this
