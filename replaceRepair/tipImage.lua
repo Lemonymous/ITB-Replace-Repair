@@ -10,6 +10,7 @@ local function AddPawn(loc, pawnType, damaged)
 		local pawn = PAWN_FACTORY:CreatePawn(pawnType)
 		Board:AddPawn(pawn, loc)
 		if damaged then
+			Board:DamageSpace(SpaceDamage(loc, pawn:GetHealth() - 1))
 		--	CUtils.SetHealth(pawn, 1)
 		end
 	end
@@ -48,6 +49,7 @@ function this:setup(skill)
 	Board:AddPawn(pawn, t.Unit or t.Unit_Damaged)
 	
 	if t.Unit_Damaged then
+		Board:DamageSpace(SpaceDamage(pawn:GetSpace(), pawn:GetHealth() - 1))
 --		CUtils.SetHealth(pawn, 1)
 	end
 	
