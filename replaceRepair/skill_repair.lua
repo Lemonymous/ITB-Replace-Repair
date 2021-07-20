@@ -14,12 +14,12 @@ local this = {}
 local fields = {
 	"Name",				-- displays
 	"Description",		-- displays
-	"Class",			-- no display
+	--"Class",			-- no display. Causes bizarre crashes
 	"PathSize",
 	"MinDamage",		-- displays?
 	"Damage",			-- displays
 	"SelfDamage",		-- displays
-	"Limited",			-- shows up on tooltip, but doesn't seem to do anything. limited could be modded.
+	--"Limited",		-- shows up on tooltip, but doesn't seem to do anything. Causes bizarre crashes
 	"LaunchSound",		-- no sound in tipimage
 	"ImpactSound",		-- no sound in tipimage
 	"ProjectileArt",
