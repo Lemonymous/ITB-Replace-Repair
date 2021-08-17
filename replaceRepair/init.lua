@@ -7,7 +7,6 @@ local selected = require(path .."replaceRepair/lib/selected")
 local highlighted = require(path .."replaceRepair/lib/highlighted")
 local uiIcon = require(path .."replaceRepair/uiIcon")
 local compatibility = require(path .."replaceRepair/compatibility")
-local menu = require(path .."replaceRepair/lib/menu")
 
 local this = {
 	version = "2.2.1",
@@ -22,7 +21,6 @@ function this.internal_init()
 	local m = lmn_replaceRepair
 	
 	assert(modApiExt_internal)
-	assert(package.loadlib(path .."replaceRepair/lib/utils.dll", "luaopen_utils"))()
 	
 	if m.inited then return end
 	m.inited = true
@@ -58,7 +56,6 @@ end
 function this:load()
 	selected:load()
 	highlighted:load()
-	menu:load()
 end
 
 return this

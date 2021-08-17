@@ -1,6 +1,5 @@
 
 local path = mod_loader.mods[modApi.currentMod].scriptPath
-local menu = require(path .."replaceRepair/lib/menu")
 local Ui2 = require(path .."replaceRepair/ui/Ui2")
 local DecoSolid2 = require(path .."replaceRepair/ui/deco/decoSolid2")
 
@@ -53,7 +52,7 @@ end
 
 function this:draw(screen)
 	local anim = self.animations.fade
-	if menu.isClosed() then
+	if not sdlext.isEscapeMenuWindowVisible() then
 		anim:stop()
 		self.decorations[2].color = self.colorTransparent
 	elseif anim:isStopped() then

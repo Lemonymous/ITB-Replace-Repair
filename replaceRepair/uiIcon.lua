@@ -3,7 +3,6 @@ local path = mod_loader.mods[modApi.currentMod].resourcePath
 local uiVisiblePawn = require(path .."scripts/replaceRepair/lib/uiVisiblePawn")
 local UiCover = require(path .."scripts/replaceRepair/ui/cover")
 local clip = require(path .."scripts/replaceRepair/lib/clip")
-local menu = require(path .."scripts/replaceRepair/lib/menu")
 
 local icon = sdlext.surface("img/weapons/repair.png")
 local iconFrozen = sdlext.surface("img/weapons/repair_frozen.png")
@@ -50,7 +49,7 @@ function this.createui()
 			:widthpx(32):heightpx(80)
 			:addTo(uiRoot)
 		
-		-- 220 alpha black when menu is open
+		-- 220 alpha black when escape menu is open
 		local mask_menu = UiCover()
 			:addTo(root)
 		
