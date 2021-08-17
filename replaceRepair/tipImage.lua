@@ -2,7 +2,6 @@
 -- internal library, not meant for outside use.
 local path = mod_loader.mods[modApi.currentMod].scriptPath
 local selected = require(path .."replaceRepair/lib/selected")
---local CUtils = require(path .."replaceRepair/lib/CUtils")
 local this = {}
 
 local function AddPawn(loc, pawnType, damaged)
@@ -11,7 +10,6 @@ local function AddPawn(loc, pawnType, damaged)
 		Board:AddPawn(pawn, loc)
 		if damaged then
 			Board:DamageSpace(SpaceDamage(loc, pawn:GetHealth() - 1))
-		--	CUtils.SetHealth(pawn, 1)
 		end
 	end
 end
@@ -50,7 +48,6 @@ function this:setup(skill)
 	
 	if t.Unit_Damaged then
 		Board:DamageSpace(SpaceDamage(pawn:GetSpace(), pawn:GetHealth() - 1))
---		CUtils.SetHealth(pawn, 1)
 	end
 	
 	local mechId = selected:GetId()
