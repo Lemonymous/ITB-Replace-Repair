@@ -167,7 +167,6 @@ local mod = mod_loader.mods[modApi.currentMod]
 local path = mod.resourcePath
 local init = require(path .."scripts/replaceRepair/init")
 local skill_repair = require(path .."scripts/replaceRepair/skill_repair")
-local file_exists = require(path .."scripts/replaceRepair/lib/file_exists")
 local asset_exists = require(path .."scripts/replaceRepair/lib/asset_exists")
 local pilotSkills = {}
 local mechSkills = {}
@@ -195,14 +194,14 @@ function this:SetRepairSkill(t)
 		assert(type(t.Icon) == 'string')
 		
 		local icon = path .. t.Icon
-		if file_exists(icon) then
+		if modApi:fileExists(icon) then
 			t.surface = sdlext.surface(icon)
 		elseif asset_exists(t.Icon) then
 			t.surface = sdlext.surface(t.Icon)
 		end
 		
 		icon = path .. t.Icon:sub(1,-5) .."_frozen.png"
-		if file_exists(icon) then
+		if modApi:fileExists(icon) then
 			t.surface_frozen = sdlext.surface(icon)
 		end
 	end
