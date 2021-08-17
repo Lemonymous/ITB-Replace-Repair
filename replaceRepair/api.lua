@@ -167,7 +167,6 @@ local mod = mod_loader.mods[modApi.currentMod]
 local path = mod.resourcePath
 local init = require(path .."scripts/replaceRepair/init")
 local skill_repair = require(path .."scripts/replaceRepair/skill_repair")
-local asset_exists = require(path .."scripts/replaceRepair/lib/asset_exists")
 local pilotSkills = {}
 local mechSkills = {}
 
@@ -196,7 +195,7 @@ function this:SetRepairSkill(t)
 		local icon = path .. t.Icon
 		if modApi:fileExists(icon) then
 			t.surface = sdlext.surface(icon)
-		elseif asset_exists(t.Icon) then
+		elseif modApi:assetExists(t.Icon) then
 			t.surface = sdlext.surface(t.Icon)
 		end
 		
