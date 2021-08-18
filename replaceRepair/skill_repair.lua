@@ -4,7 +4,6 @@ local mod = mod_loader.mods[modApi.currentMod]
 local path = mod.scriptPath
 local subs = require(path .."replaceRepair/subs")
 local uiVisiblePawn = require(path .."replaceRepair/lib/uiVisiblePawn")
-local isTipImage = require(path .."replaceRepair/lib/isTipImage")
 local tipImage = require(path .."replaceRepair/tipImage")
 local this = {}
 
@@ -42,7 +41,7 @@ local weaponTexts = {
 local function GetTargetArea(skill, p, ...)
 	local Skill = _G[skill]
 	
-	if isTipImage() then
+	if Board:IsTipImage() then
 		tipImage:clear()
 		tipImage:setup(skill)
 		
@@ -57,7 +56,7 @@ end
 local function GetSkillEffect(skill, p1, p2, _, ...)
 	local Skill = _G[skill]
 	
-	if isTipImage() then
+	if Board:IsTipImage() then
 		if Skill.CustomTipImage ~= "" then
 			skill = Skill.CustomTipImage
 		end
@@ -127,7 +126,7 @@ end
 local function OverrideGetFuncs(field)
 	local m = lmn_replaceRepair
 	Skill_Repair["Get".. field] = function(self, ...)
-		local pawn = isTipImage() and Board:GetSelectedPawn() or Pawn
+		local pawn = Board:IsTipImage() and Board:GetSelectedPawn() or Pawn
 		if pawn then
 			for _, v in ipairs(m.swaps) do
 				if v.IsActive(pawn) then
