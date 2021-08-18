@@ -18,8 +18,6 @@ assert(not m.inited, "Replace Repair library has not been initialized.")
 function this.internal_init()
 	local m = lmn_replaceRepair
 	
-	assert(modApiExt_internal)
-	
 	if m.inited then return end
 	m.inited = true
 	
@@ -34,8 +32,7 @@ end
 if not m.modApiFinalize then
 	m.modApiFinalize = modApi.finalize
 	function modApi.finalize(...)
-		xpcall(lmn_replaceRepair.mostRecent.internal_init, function(e) LOG(e .. " Mods using Replace Repair requires to manually init and load modApiExt.") end)
-		
+		lmn_replaceRepair.mostRecent.internal_init()
 		m.modApiFinalize(...)
 	end
 end
