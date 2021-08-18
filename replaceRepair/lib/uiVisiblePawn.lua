@@ -1,10 +1,11 @@
 
-local path = mod_loader.mods[modApi.currentMod].scriptPath
-local selected = require(path .."replaceRepair/lib/selected")
-local highlighted = require(path .."replaceRepair/lib/highlighted")
-
-return function()
+local function uiVisiblePawn()
 	if not Board then return end
-	
-	return selected:Get() or highlighted:Get() and Board:GetPawn(highlighted:Get())
+
+	local highlighted = Board:GetHighlighted()
+	local selected = Board:GetSelectedPawn()
+
+	return selected or Board:GetPawn(highlighted)
 end
+
+return uiVisiblePawn

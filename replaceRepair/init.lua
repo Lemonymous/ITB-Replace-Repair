@@ -3,8 +3,6 @@
 local path = mod_loader.mods[modApi.currentMod].scriptPath
 local skill_repair = require(path .."replaceRepair/skill_repair")
 local skill_info = require(path .."replaceRepair/skill_info")
-local selected = require(path .."replaceRepair/lib/selected")
-local highlighted = require(path .."replaceRepair/lib/highlighted")
 local uiIcon = require(path .."replaceRepair/uiIcon")
 local compatibility = require(path .."replaceRepair/compatibility")
 
@@ -54,8 +52,6 @@ end
 
 -- repairApi:load() will call this for you.
 function this:load()
-	selected:load()
-	highlighted:load()
 end
 
 return this

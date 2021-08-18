@@ -1,7 +1,6 @@
 
 -- internal library, not meant for outside use.
 local path = mod_loader.mods[modApi.currentMod].scriptPath
-local selected = require(path .."replaceRepair/lib/selected")
 local this = {}
 
 local function AddPawn(loc, pawnType, damaged)
@@ -41,7 +40,7 @@ function this:setup(skill)
 	if self:verify(skill).incomplete then return end
 	
 	local t = _G[skill].TipImage
-	local selected = selected:Get() or Game:GetPawn(0)
+	local selected = Board:GetSelectedPawn() or Game:GetPawn(0)
 	local pawnType = t.CustomPawn or selected:GetType()
 	local pawn = PAWN_FACTORY:CreatePawn(pawnType)
 	Board:AddPawn(pawn, t.Unit or t.Unit_Damaged)

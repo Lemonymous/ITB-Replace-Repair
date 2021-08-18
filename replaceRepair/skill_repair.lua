@@ -3,7 +3,6 @@
 local mod = mod_loader.mods[modApi.currentMod]
 local path = mod.scriptPath
 local subs = require(path .."replaceRepair/subs")
-local selected = require(path .."replaceRepair/lib/selected")
 local uiVisiblePawn = require(path .."replaceRepair/lib/uiVisiblePawn")
 local isTipImage = require(path .."replaceRepair/lib/isTipImage")
 local tipImage = require(path .."replaceRepair/tipImage")
@@ -128,7 +127,7 @@ end
 local function OverrideGetFuncs(field)
 	local m = lmn_replaceRepair
 	Skill_Repair["Get".. field] = function(self, ...)
-		local pawn = isTipImage() and selected:Get() or Pawn
+		local pawn = isTipImage() and Board:GetSelectedPawn() or Pawn
 		if pawn then
 			for _, v in ipairs(m.swaps) do
 				if v.IsActive(pawn) then
