@@ -1,7 +1,7 @@
 
 -- internal library, not meant for outside use.
 local path = mod_loader.mods[modApi.currentMod].scriptPath
-local this = {}
+local tipImageBuilder = {}
 
 local function AddPawn(loc, pawnType, damaged)
 	if not Board:IsPawnSpace(loc) then
@@ -20,7 +20,7 @@ local function AddEffect(loc, effect)
 end
 
 -- clears the board.
-function this:clear()
+function tipImageBuilder:clear()
 	local size = Board:GetSize()
 	for x = 0, size.x - 1 do
 		for y = 0, size.y - 1 do
@@ -31,7 +31,7 @@ function this:clear()
 end
 
 -- setups the board according to a skill's TipImage.
-function this:setup(skill)
+function tipImageBuilder:setup(skill)
 	if _G[skill].CustomTipImage ~= "" then
 		skill = _G[skill].CustomTipImage
 	end
@@ -91,7 +91,7 @@ function this:setup(skill)
 	end
 end
 
-function this:verify(skill)
+function tipImageBuilder:verify(skill)
 	local ret = {}
 	local Skill = _G[skill]
 	
@@ -109,4 +109,4 @@ function this:verify(skill)
 	return ret
 end
 
-return this
+return tipImageBuilder
