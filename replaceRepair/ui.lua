@@ -14,6 +14,8 @@ local lavaIcon = sdlext.getSurface{ path = "img/combat/icons/icon_lava.png", sca
 
 local COLOR_BLACK_140 = sdl.rgba(0, 0, 0, 140)
 local COLOR_BLACK_220 = sdl.rgba(0, 0, 0, 220)
+local TEXT_TURN_OVER_FONT = deco.fonts.menufont
+local TEXT_TURN_OVER_SETTINGS = deco.textset(sdl.rgb(109, 138, 181), deco.colors.framebg, 2)
 local rect_mask_R = sdl.rect(0, 0, 15, 15)
 
 local function getSelectedOrHighlightedPawn()
@@ -25,6 +27,21 @@ local function getSelectedOrHighlightedPawn()
 	local pawn = getSelectedPawn() or Board:GetPawn(highlighted)
 
 	return pawn
+end
+
+local function getPawnWeaponCount(pawn)
+	local ptable = pawn:GetPawnTable()
+	local weaponCount = 0
+
+	if ptable.primary_power and ptable.primary_power[1] ~= 0 then
+		weaponCount = weaponCount + 1
+	end
+
+	if ptable.secondary_power and ptable.secondary_power[1] ~= 0 then
+		weaponCount = weaponCount + 1
+	end
+
+	return weaponCount
 end
 
 local function getTerrainOverlayIcon(pawn)
@@ -92,10 +109,12 @@ local function createUi(screen, uiRoot)
 	ui.decoTerrainMask = DecoSolid()
 	ui.decoTerrainIcon = DecoSurface()
 	ui.animations.fade = UiAnim(ui, 100, fadeToBlack)
+	ui.decoTurnOver = DecoText()
 
 	ui.decoRepairIcon.draw = drawSurfaceCentered
 	ui.decoTerrainIcon.draw = drawSurfaceCentered
 	ui.decoMenuMask.draw = drawWhileEscMenu
+	ui.decoTurnOver.surfaceText = sdl.text(TEXT_TURN_OVER_FONT, TEXT_TURN_OVER_SETTINGS, "Turn")
 
 	function ui.animations.fade:isDone()
 		return false
@@ -106,6 +125,9 @@ local function createUi(screen, uiRoot)
 		ui.decoInactiveMask,
 		ui.decoTerrainMask,
 		ui.decoTerrainIcon,
+		DecoAlign(5, 6),
+		ui.decoTurnOver,
+		DecoAnchor(),
 		ui.decoMenuMask
 	}
 
@@ -123,14 +145,6 @@ local function createUi(screen, uiRoot)
 			return
 		end
 
-		if screen:w() >= 1280 then
-			self.w = 34
-			xOffset = -1
-		else
-			self.w = 59
-			xOffset = -13
-		end
-
 		if vanillaRepairIcon:wasDrawn() then
 			drawnVanillaIcon = vanillaRepairIcon
 			customRepairIcon = skill.surface
@@ -141,6 +155,39 @@ local function createUi(screen, uiRoot)
 		end
 
 		if customRepairIcon then
+			local isScreenLowRes = screen:w() < 1280
+			local isPawnActive = pawn:IsActive()
+			local pawnWeaponCount = getPawnWeaponCount(pawn)
+
+			if isScreenLowRes then
+				self.w = 59
+				xOffset = -13
+			else
+				self.w = 34
+				xOffset = -1
+			end
+
+			self.decoRepairIcon.surface = customRepairIcon
+			self.decoTerrainIcon.surface = getTerrainOverlayIcon(pawn)
+
+			if self.decoTerrainIcon.surface == nil then
+				self.decoTerrainMask.color = deco.colors.transparent
+			else
+				self.decoTerrainMask.color = COLOR_BLACK_140
+			end
+
+			if isPawnActive then
+				self.decoInactiveMask.color = deco.colors.transparent
+			else
+				self.decoInactiveMask.color = COLOR_BLACK_140
+			end
+
+			if isScreenLowRes and not isPawnActive and pawnWeaponCount == 1 then
+				self.decoTurnOver.surface = self.decoTurnOver.surfaceText
+			else
+				self.decoTurnOver.surface = nil
+			end
+
 			self.x = drawnVanillaIcon.x + xOffset
 			self.y = drawnVanillaIcon.y
 			self.screenx = self.x
@@ -151,20 +198,6 @@ local function createUi(screen, uiRoot)
 			self.rect.h = self.h
 
 			self.visible = true
-			self.decoRepairIcon.surface = customRepairIcon
-			self.decoTerrainIcon.surface = getTerrainOverlayIcon(pawn)
-
-			if self.decoTerrainIcon.surface == nil then
-				self.decoTerrainMask.color = deco.colors.transparent
-			else
-				self.decoTerrainMask.color = COLOR_BLACK_140
-			end
-
-			if pawn:IsActive() then
-				self.decoInactiveMask.color = deco.colors.transparent
-			else
-				self.decoInactiveMask.color = COLOR_BLACK_140
-			end
 		end
 
 		Ui.relayout(self)
