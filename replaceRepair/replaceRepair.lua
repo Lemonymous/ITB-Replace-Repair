@@ -22,11 +22,11 @@ local function onModsInitialized()
 end
 
 local function isPilotSkill(self, pawn)
-	return pawn:IsAbility(self.PilotSkill)
+	return pawn:IsAbility(self.pilotSkill)
 end
 
 local function isMechType(self, pawn)
-	return pawn:GetType() == self.MechType
+	return pawn:GetType() == self.mechType
 end
 
 local function addSkill(self, repairSkill)
@@ -36,12 +36,16 @@ local function addSkill(self, repairSkill)
 		repairSkill.isActive = function(self, pawn) return repairSkill.IsActive(pawn) end
 	end
 
-	local weapon = repairSkill.weapon or repairSkill.Weapon
-	local icon = repairSkill.icon or repairSkill.Icon
+	repairSkill.weapon = repairSkill.weapon or repairSkill.Weapon
+	repairSkill.icon = repairSkill.icon or repairSkill.Icon
+	repairSkill.pilotSkill = repairSkill.pilotSkill or repairSkill.PilotSkill
+	repairSkill.mechType = repairSkill.mechType or repairSkill.MechType
+
+	local weapon = repairSkill.weapon
+	local icon = repairSkill.icon
 	local iconFrozen = repairSkill.iconFrozen
-	local isActive = repairSkill.isActive
-	local pilotSkill = repairSkill.pilotSkill or repairSkill.PilotSkill
-	local mechType = repairSkill.mechType or repairSkill.MechType
+	local pilotSkill = repairSkill.pilotSkill
+	local mechType = repairSkill.mechType
 
 	Assert.Equals('string', type(weapon), "Field 'weapon'")
 	Assert.Equals({'nil', 'string'}, type(icon), "Field 'icon'")

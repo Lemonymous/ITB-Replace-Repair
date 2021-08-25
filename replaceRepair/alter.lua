@@ -126,7 +126,7 @@ local function OverrideGetFuncs(field)
 		if pawn then
 			for _, repairSkill in ipairs(ReplaceRepair.repairSkills) do
 				if repairSkill:isActive(pawn) then
-					return getField(repairSkill.Weapon, field, ...)
+					return getField(repairSkill.weapon, field, ...)
 				end
 			end
 		end
@@ -141,17 +141,17 @@ local function overrideGetSkillInfo()
 	function GetSkillInfo(skill)
 		local repairSkill = ReplaceRepair:getCurrentSkill()
 
-		if repairSkill and repairSkill.PilotSkill then
+		if repairSkill and repairSkill.pilotSkill then
 			return PilotSkill(
-				repairSkill.Name or "RR_NoNameFound",
-				repairSkill.Description or "RR_NoDescFound"
+				repairSkill.name or "RR_NoNameFound",
+				repairSkill.description or "RR_NoDescFound"
 			)
 		else
 			for _, repairSkill in ipairs(ReplaceRepair.repairSkills) do
-				if skill == repairSkill.PilotSkill then
+				if skill == repairSkill.pilotSkill then
 					return PilotSkill(
-						repairSkill.Name,
-						repairSkill.Description
+						repairSkill.name,
+						repairSkill.description
 					)
 				end
 			end
@@ -190,9 +190,9 @@ local function overrideGetText()
 
 			if repairSkill then
 				if id:match("Name$") then
-					result = _G[repairSkill.Weapon]:GetName()
+					result = _G[repairSkill.weapon]:GetName()
 				elseif id:match("Description$") then
-					result = _G[repairSkill.Weapon]:GetDescription()
+					result = _G[repairSkill.weapon]:GetDescription()
 				end
 			end
 		end
