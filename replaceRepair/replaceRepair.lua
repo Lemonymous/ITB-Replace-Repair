@@ -38,12 +38,14 @@ local function addSkill(self, repairSkill)
 
 	local weapon = repairSkill.weapon or repairSkill.Weapon
 	local icon = repairSkill.icon or repairSkill.Icon
+	local iconFrozen = repairSkill.iconFrozen
 	local isActive = repairSkill.isActive
 	local pilotSkill = repairSkill.pilotSkill or repairSkill.PilotSkill
 	local mechType = repairSkill.mechType or repairSkill.MechType
 
 	Assert.Equals('string', type(weapon), "Field 'weapon'")
 	Assert.Equals({'nil', 'string'}, type(icon), "Field 'icon'")
+	Assert.Equals({'nil', 'string'}, type(iconFrozen), "Field 'iconFrozen'")
 	Assert.Equals({'nil', 'function'}, type(isActive), "Field 'isActive'")
 
 	if isActive then
@@ -70,11 +72,19 @@ local function addSkill(self, repairSkill)
 
 	if icon then
 		icon = icon:match(".-.png$") or icon..".png"
+		iconFrozen = iconFrozen or icon:sub(1,-5).."_frozen.png"
+		iconFrozen = iconFrozen:match(".-.png$") or iconFrozen..".png"
 
 		if modApi:fileExists(mod.resourcePath..icon) then
 			repairSkill.surface = sdlext.getSurface{ path = mod.resourcePath..icon }
 		elseif modApi:assetExists(icon) then
 			repairSkill.surface = sdlext.getSurface{ path = icon }
+		end
+
+		if modApi:fileExists(mod.resourcePath..iconFrozen) then
+			repairSkill.surface_frozen = sdlext.getSurface{ path = mod.resourcePath..iconFrozen }
+		elseif modApi:assetExists(iconFrozen) then
+			repairSkill.surface_frozen = sdlext.getSurface{ path = iconFrozen }
 		end
 	end
 
