@@ -1,6 +1,8 @@
 
--- internal library, not meant for outside use.
-local path = mod_loader.mods[modApi.currentMod].scriptPath
+local path = GetParentPath(...)
+local selected = require(path.."lib/selected")
+local getSelectedPawn = selected.getSelectedPawn
+
 local tipImageBuilder = {}
 
 local function AddPawn(loc, pawnType, damaged)
@@ -40,7 +42,7 @@ function tipImageBuilder:setup(skill)
 	if self:verify(skill).incomplete then return end
 	
 	local t = _G[skill].TipImage
-	local selected = Board:GetSelectedPawn() or Game:GetPawn(0)
+	local selected = getSelectedPawn() or Game:GetPawn(0)
 	local pawnType = t.CustomPawn or selected:GetType()
 	local pawn = PAWN_FACTORY:CreatePawn(pawnType)
 	Board:AddPawn(pawn, t.Unit or t.Unit_Damaged)
