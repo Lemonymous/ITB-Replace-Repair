@@ -1,7 +1,7 @@
 
 local path = GetParentPath(...)
 local selected = require(path.."lib/selected")
-local tipImageBuilder = require(path.."tipImage")
+local tipImageBuilder = require(path.."tipImageBuilder")
 local getSelectedPawn = selected.getSelectedPawn
 
 -- overriding most of these fields,
