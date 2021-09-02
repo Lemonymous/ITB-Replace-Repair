@@ -1,21 +1,31 @@
 
 local nullfunction = function() end
+local compatibility = {}
 
-lmn_replaceRepair = ReplaceRepair
+compatibility.SetRepairSkill = ReplaceRepair.addSkill
+compatibility.SetPilotRepairSkill = ReplaceRepair.addSkill
+compatibility.SetMechRepairSkill = ReplaceRepair.addSkill
+compatibility.GetCurrentSkill = function() return ReplaceRepair:getCurrentSkill() end
+compatibility.GetVersion = ReplaceRepair.getVersion
+compatibility.GetHighestVersion = ReplaceRepair.getVersion
+compatibility.mostRecent = ReplaceRepair
+compatibility.init = nullfunction
+compatibility.load = nullfunction
+compatibility.internal_init = nullfunction
 
-ReplaceRepair.SetRepairSkill = ReplaceRepair.addSkill
-ReplaceRepair.SetPilotRepairSkill = ReplaceRepair.addSkill
-ReplaceRepair.SetMechRepairSkill = ReplaceRepair.addSkill
-ReplaceRepair.GetVersion = ReplaceRepair.getVersion
-ReplaceRepair.GetHighestVersion = ReplaceRepair.getVersion
-ReplaceRepair.mostRecent = ReplaceRepair
-ReplaceRepair.init = nullfunction
-ReplaceRepair.load = nullfunction
-ReplaceRepair.internal_init = nullfunction
+if lmn_replaceRepair then
+	if lmn_replaceRepair.swaps ~= ReplaceRepair.queued then
+		for _, entry in ipairs(lmn_replaceRepair.swaps) do
+			table.insert(ReplaceRepair.queued, entry)
+		end
+	end
+end
+
+lmn_replaceRepair = {}
+lmn_replaceRepair.swaps = ReplaceRepair.queued
 
 if replaceRepair_internal == nil then
 	replaceRepair_internal = {}
-	setmetatable(replaceRepair_internal, { __index = ReplaceRepair })
 
 	replaceRepair_internal.RootGetTargetArea = Skill_Repair.GetTargetArea
 	replaceRepair_internal.RootGetSkillEffect = Skill_Repair.GetSkillEffect
@@ -26,10 +36,14 @@ if replaceRepair_internal == nil then
 	replaceRepair_internal.OrigDescription = Weapon_Texts.Skill_Repair_Description
 end
 
-function ReplaceRepair:ForPilot(sPilotSkill, sWeapon, sPilotTooltip, sIcon)
+setmetatable(ReplaceRepair, { __index = compatibility })
+setmetatable(lmn_replaceRepair, { __index = ReplaceRepair })
+setmetatable(replaceRepair_internal, { __index = ReplaceRepair })
+
+function compatibility:ForPilot(sPilotSkill, sWeapon, sPilotTooltip, sIcon)
 	Assert.ModInitializingOrLoading()
 
-	self:SetRepairSkill{
+	self:addSkill{
 		name = sPilotTooltip[1],
 		description = sPilotTooltip[2],
 		pilotSkill = sPilotSkill,
@@ -38,10 +52,10 @@ function ReplaceRepair:ForPilot(sPilotSkill, sWeapon, sPilotTooltip, sIcon)
 	}
 end
 
-function ReplaceRepair:ForMech(sMech, sWeapon, sIcon)
+function compatibility:ForMech(sMech, sWeapon, sIcon)
 	Assert.ModInitializingOrLoading()
 
-	self:SetRepairSkill{
+	self:addSkill{
 		mechType = sMech,
 		weapon = sWeapon,
 		icon = sIcon

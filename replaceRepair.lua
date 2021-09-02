@@ -36,6 +36,8 @@ local function addSkill(self, repairSkill)
 		repairSkill.isActive = function(self, pawn) return repairSkill.IsActive(pawn) end
 	end
 
+	repairSkill.name = repairSkill.name or repairSkill.Name
+	repairSkill.description = repairSkill.description or repairSkill.Description
 	repairSkill.weapon = repairSkill.weapon or repairSkill.Weapon
 	repairSkill.icon = repairSkill.icon or repairSkill.Icon
 	repairSkill.pilotSkill = repairSkill.pilotSkill or repairSkill.PilotSkill
@@ -46,6 +48,7 @@ local function addSkill(self, repairSkill)
 	local iconFrozen = repairSkill.iconFrozen
 	local pilotSkill = repairSkill.pilotSkill
 	local mechType = repairSkill.mechType
+	local isActive = repairSkill.isActive
 
 	Assert.Equals('string', type(weapon), "Field 'weapon'")
 	Assert.Equals({'nil', 'string'}, type(icon), "Field 'icon'")
@@ -61,10 +64,8 @@ local function addSkill(self, repairSkill)
 		elseif mechType then
 			repairSkill.isActive = isMechType
 			repairSkill.priority = PRIORITY_MECH
-		end
-
-		if repairSkill.isActive == nil then
-			error(string.format(
+		else
+			Assert.Error(string.format(
 				"Repair skill condition not defined for"..
 				"repair skill added by mod with id [%s]",
 				repairSkill.modId
@@ -107,7 +108,7 @@ local function getCurrentSkill(self)
 		return
 	end
 
-	for _, repairSkill in ipairs(ReplaceRepair.repairSkills) do
+	for _, repairSkill in ipairs(self.repairSkills) do
 		if repairSkill:isActive(pawn) then
 			return repairSkill
 		end
@@ -130,6 +131,7 @@ if ReplaceRepair == nil or not modApi:isVersion(VERSION, ReplaceRepair.version) 
 		Assert.Equals('table', type(repairSkill), "Argument #1")
 
 		repairSkill.modId = modApi.currentMod
+		repairSkill.Priority = PRIORITY_CUSTOM -- comp
 		table.insert(self.queued, repairSkill)
 	end
 
