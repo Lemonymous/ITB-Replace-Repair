@@ -150,6 +150,7 @@ if ReplaceRepair == nil or not modApi:isVersion(VERSION, ReplaceRepair.version) 
 		end
 
 		self.queued = nil
+		self.addSkill = nil
 
 		table.sort(self.repairSkills, function(a,b)
 			-- sort table, such that: custom skill > pilot skills > mech skills
