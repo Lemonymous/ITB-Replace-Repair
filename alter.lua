@@ -150,8 +150,8 @@ local function overrideGetSkillInfo()
 			for _, repairSkill in ipairs(ReplaceRepair.repairSkills) do
 				if skill == repairSkill.pilotSkill then
 					return PilotSkill(
-						repairSkill.name,
-						repairSkill.description
+						repairSkill.name or "RR_NoNameFound",
+						repairSkill.description or "RR_NoDescFound"
 					)
 				end
 			end
