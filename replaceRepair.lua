@@ -43,6 +43,8 @@ local function addSkill(self, repairSkill)
 	repairSkill.pilotSkill = repairSkill.pilotSkill or repairSkill.PilotSkill
 	repairSkill.mechType = repairSkill.mechType or repairSkill.MechType
 
+	local name = repairSkill.name
+	local description = repairSkill.description
 	local weapon = repairSkill.weapon
 	local icon = repairSkill.icon
 	local iconFrozen = repairSkill.iconFrozen
@@ -54,6 +56,14 @@ local function addSkill(self, repairSkill)
 	Assert.Equals({'nil', 'string'}, type(icon), "Field 'icon'")
 	Assert.Equals({'nil', 'string'}, type(iconFrozen), "Field 'iconFrozen'")
 	Assert.Equals({'nil', 'function'}, type(isActive), "Field 'isActive'")
+
+	-- backwards compatibility
+	repairSkill.Name = name
+	repairSkill.Description = description
+	repairSkill.Weapon = weapon
+	repairSkill.Icon = icon
+	repairSkill.PilotSkill = pilotSkill
+	repairSkill.MechType = mechType
 
 	if isActive then
 		repairSkill.priority = PRIORITY_CUSTOM
