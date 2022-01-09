@@ -1,9 +1,9 @@
 
--- internal library, not meant for outside use.
-local path = mod_loader.mods[modApi.currentMod].scriptPath
-local selected = require(path .."replaceRepair/lib/selected")
---local CUtils = require(path .."replaceRepair/lib/CUtils")
-local this = {}
+local path = GetParentPath(...)
+local selected = require(path.."lib/selected")
+local getSelectedPawn = selected.getSelectedPawn
+
+local tipImageBuilder = {}
 
 local function AddPawn(loc, pawnType, damaged)
 	if not Board:IsPawnSpace(loc) then
@@ -11,7 +11,6 @@ local function AddPawn(loc, pawnType, damaged)
 		Board:AddPawn(pawn, loc)
 		if damaged then
 			Board:DamageSpace(SpaceDamage(loc, pawn:GetHealth() - 1))
-		--	CUtils.SetHealth(pawn, 1)
 		end
 	end
 end
@@ -23,7 +22,7 @@ local function AddEffect(loc, effect)
 end
 
 -- clears the board.
-function this:clear()
+function tipImageBuilder:clear()
 	local size = Board:GetSize()
 	for x = 0, size.x - 1 do
 		for y = 0, size.y - 1 do
@@ -34,7 +33,7 @@ function this:clear()
 end
 
 -- setups the board according to a skill's TipImage.
-function this:setup(skill)
+function tipImageBuilder:setup(skill)
 	if _G[skill].CustomTipImage ~= "" then
 		skill = _G[skill].CustomTipImage
 	end
@@ -43,14 +42,13 @@ function this:setup(skill)
 	if self:verify(skill).incomplete then return end
 	
 	local t = _G[skill].TipImage
-	local selected = selected:Get() or Game:GetPawn(0)
+	local selected = getSelectedPawn() or Game:GetPawn(0)
 	local pawnType = t.CustomPawn or selected:GetType()
 	local pawn = PAWN_FACTORY:CreatePawn(pawnType)
 	Board:AddPawn(pawn, t.Unit or t.Unit_Damaged)
 	
 	if t.Unit_Damaged then
 		Board:DamageSpace(SpaceDamage(pawn:GetSpace(), pawn:GetHealth() - 1))
---		CUtils.SetHealth(pawn, 1)
 	end
 	
 	local mechId = selected:GetId()
@@ -95,7 +93,7 @@ function this:setup(skill)
 	end
 end
 
-function this:verify(skill)
+function tipImageBuilder:verify(skill)
 	local ret = {}
 	local Skill = _G[skill]
 	
@@ -113,4 +111,4 @@ function this:verify(skill)
 	return ret
 end
 
-return this
+return tipImageBuilder
